@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <h1>Express</h1>
+    <fieldset>
+        <legend>GET</legend>
+        <form>
+            <label>URL : </label><input type="text" class="ipt" id="getUrl">&nbsp;&nbsp;<label>Params : </label><input type="text" class="ipt" id="getParam" disabled><input type="button" value="提交" class="btn" id="getBtn">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>POST</legend>
+        <form>
+            <label>URL : </label><input type="text" class="ipt" id="postUrl">&nbsp;&nbsp;<label>Params : </label><input type="text" class="ipt" id="postParam"><input type="button" value="提交" class="btn" id="postBtn">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>UPLOAD</legend>
+        <form>
+            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam"><input type="button" value="提交" class="btn" id="uploadBtn">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>RESULT</legend>
+        <form>
+            <textarea  id="result" class="result" cols="110" rows="10"></textarea>
+        </form>
+    </fieldset>
+    <script>
+        var getBtn = document.getElementById('getBtn');
+        var getUrl = document.getElementById('getUrl');
+        var getParam = document.getElementById('getParam');
+        var postBtn = document.getElementById('postBtn');
+        var postUrl = document.getElementById('postUrl');
+        var postParam = document.getElementById('postParam');
+        var uploadBtn = document.getElementById('uploadBtn');
+        var uploadUrl = document.getElementById('uploadUrl');
+        var uploadParam = document.getElementById('uploadParam');
+        var result = document.getElementById('result');
+
+        getBtn.onclick = get;
+        postBtn.onclick = post;
+        uploadBtn.onclick = upload;
+
+        function get() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET',getUrl.value,true);
+            xhr.send(null)
+            xhr.onload = function() {
+                result.value = xhr.responseText;
+            }
+        }
+
+        function post() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST',postUrl.value,true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(postParam.value)
+            xhr.onload = function() {
+                result.value = xhr.responseText;
+            }
+        }
+
+        function upload() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST',uploadUrl.value,true);
+            xhr.setRequestHeader("Content-Type", "multipart/form-data");
+            xhr.setRequestHeader("Content-Type", "boundary=AaB03x;");
+            xhr.send(uploadParam.value)
+            xhr.onload = function() {
+                result.value = xhr.responseText;
+            }
+        }
+
+    </script>
+</body>
+</html>

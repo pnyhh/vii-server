@@ -1,0 +1,41 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+fieldset{
+  width: 900px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+fieldset>form>label{
+  font-size: 18px;
+}
+fieldset>form>.ipt{
+  height: 30px;
+  width: 300px;
+  border:2px solid #abc;
+  outline: none;
+  border-radius: 5px;
+  font-size: 18px;
+  text-indent: 10px;
+}
+fieldset>form>.btn{
+  vertical-align: middle;
+  width: 75px;
+  height: 36px;
+  margin-left: 10px;
+  margin-top: -1px;
+}
+fieldset>form>.result{
+  resize: none;
+}
+
+#uploadParam{
+  font-size: 14px;
+  padding-top: 2px;
+}
