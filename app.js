@@ -12,6 +12,16 @@ var uploadTest = require('./routes/uploadTest');
 
 var app = express();
 
+//database
+var config = require('./config');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://'+config.db.user+':'+config.db.pwd+'@'+config.db.host+':'+config.db.port+'/'+config.db.database);
+var db = mongoose.connection;
+db.on('error',console.error.bind(console,'connect db error:'));
+db.once('open',function() {
+    console.log(config.db.database + ' was connected...');
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', require('ejs').renderFile);
