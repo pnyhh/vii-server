@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-    loginname: String,
+    login_name: String,
     phone: String,
     gender: Number,
     birth: String,
@@ -10,10 +10,10 @@ var UserSchema = new Schema({
     country: String,
     province: String,
     city: String,
+    district: String,
     vip: Number,
-    password: String,
     nickname: String,
     summary: String
-});
+}, { collection: "users" });
 
 exports.User = mongoose.model('User',UserSchema);
