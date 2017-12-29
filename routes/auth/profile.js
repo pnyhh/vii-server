@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var models = require('../models/users');
-var result = require('../models/Response').RESPONSE;
+var models = require('../../models/users');
+var result = require('../../models/Response').RESPONSE;
 var User = models.User;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    var loginname = req.query.loginname;
-    User.find({login_name:loginname},{_id:0},function (err, docs) {
+    var login_name = req.query.login_name;
+    User.findOne({login_name:login_name},{_id:0},function (err, docs) {
         if(err){
             result.header.opCode = 0;
             result.body.msgs[0] = 'error';
