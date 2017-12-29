@@ -21,8 +21,8 @@
     </fieldset>
     <fieldset>
         <legend>UPLOAD</legend>
-        <form>
-            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam"><input type="button" value="提交" class="btn" id="uploadBtn">
+        <form enctype="multipart/form-data" method="post" name="fileinfo">
+            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam" name="fulAvatar" required><input type="submit" value="提交" class="btn" id="uploadBtn">
         </form>
     </fieldset>
     <fieldset>
@@ -38,6 +38,7 @@
         var postBtn = document.getElementById('postBtn');
         var postUrl = document.getElementById('postUrl');
         var postParam = document.getElementById('postParam');
+        var uploadForm = document.forms.namedItem('fileinfo');
         var uploadBtn = document.getElementById('uploadBtn');
         var uploadUrl = document.getElementById('uploadUrl');
         var uploadParam = document.getElementById('uploadParam');
@@ -45,7 +46,7 @@
 
         getBtn.onclick = get;
         postBtn.onclick = post;
-        uploadBtn.onclick = upload;
+        uploadForm.onsubmit = upload;
 
         function get() {
             var xhr = new XMLHttpRequest();
@@ -66,15 +67,20 @@
             }
         }
 
-        function upload() {
+        function upload(event) {
+            var oData = new FormData(uploadForm);
+            oData.append("CustomField", "This is some extra data");
             var xhr = new XMLHttpRequest();
-            xhr.open('POST',uploadUrl.value,true);
-            xhr.setRequestHeader("Content-Type", "multipart/form-data");
-            xhr.setRequestHeader("Content-Type", "boundary=AaB03x;");
-            xhr.send(uploadParam.value)
-            xhr.onload = function() {
-                result.value = xhr.responseText;
-            }
+            xhr.open("POST", uploadUrl.value, true);
+            xhr.onload = function(event) {
+                if (xhr.status == 200) {
+                    result.value = xhr.responseText;
+                } else {
+                    result.value = "Error " + xhr.status + " occurred when trying to upload your file.";
+                }
+            };
+            xhr.send(oData);
+            event.preventDefault();
         }
 
     </script>
