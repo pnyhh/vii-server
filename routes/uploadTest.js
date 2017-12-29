@@ -11,6 +11,7 @@ var formidable = require('formidable');
 var fs = require('fs');
 var AVATAR_UPLOAD_FOLDER = '/avatar/';
 var domain = "http://localhost:3000";
+var im = require('imagemagick');
 
 /* UPLOAD listing. */
 router.post('/',function(req, res, next) {
@@ -33,7 +34,7 @@ router.post('/',function(req, res, next) {
             res.send(result);
             return;
         }
-        console.log(files);
+        // console.log(files);
         var extName = '';  //后缀名
         switch (files.fulAvatar.type) {
             case 'image/pjpeg':
@@ -62,12 +63,13 @@ router.post('/',function(req, res, next) {
             return;
         }
 
-        var avatarName = files.fulAvatar.name.substring(0,files.fulAvatar.name.lastIndexOf('.')) + Date.now() + '.' + extName;
+        var avatarName = files.fulAvatar.name.substring(0,files.fulAvatar.name.lastIndexOf('.')) + Date.now();
+        var ext = '.' + extName
         //图片写入地址；
-        var newPath = form.uploadDir + avatarName;
+        var newPath = form.uploadDir + avatarName + ext;
         //显示地址；
-        var showUrl = domain + AVATAR_UPLOAD_FOLDER + avatarName;
-        console.log("newPath",newPath);
+        var showUrl = domain + AVATAR_UPLOAD_FOLDER + avatarName + ext;
+        // console.log("newPath",newPath);
         fs.renameSync(files.fulAvatar.path, newPath);  //重命名
         var result = {
             header:{opCode:1},
@@ -77,6 +79,36 @@ router.post('/',function(req, res, next) {
             }
         };
         res.send(result);
+
+        setTimeout(function() {
+            //xs
+            im.resize({
+                srcData: fs.readFileSync('public/avatar/'+avatarName+ext, 'binary'),
+                width:   50
+            }, function(err, stdout, stderr){
+                if (err) throw err
+                fs.writeFileSync('public/avatar/'+avatarName+'-xs'+ext, stdout, 'binary');
+                console.log('resized image to fit within base width 50px')
+            });
+            //sm
+            im.resize({
+                srcData: fs.readFileSync('public/avatar/'+avatarName+ext, 'binary'),
+                width:   100
+            }, function(err, stdout, stderr){
+                if (err) throw err
+                fs.writeFileSync('public/avatar/'+avatarName+'-sm'+ext, stdout, 'binary');
+                console.log('resized image to fit within base width 100px')
+            });
+            //md
+            im.resize({
+                srcData: fs.readFileSync('public/avatar/'+avatarName+ext, 'binary'),
+                width:   200
+            }, function(err, stdout, stderr){
+                if (err) throw err
+                fs.writeFileSync('public/avatar/'+avatarName+'-md'+ext, stdout, 'binary');
+                console.log('resized image to fit within base width 200px')
+            });
+        },100)
     });
 });
 
