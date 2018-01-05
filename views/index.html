@@ -22,7 +22,13 @@
     <fieldset>
         <legend>UPLOAD</legend>
         <form enctype="multipart/form-data" method="post" name="fileinfo">
-            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam" name="fulAvatar" required><input type="submit" value="提交" class="btn" id="uploadBtn">
+            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam" multiple name="fulAvatar" required><input type="submit" value="提交" class="btn" id="uploadBtn">
+        </form>
+    </fieldset>
+    <fieldset>
+        <legend>UPLOAD(BASE64)</legend>
+        <form name="img64">
+            <label>URL : </label><input type="text" class="ipt" id="upload64Url"><label>Params : </label><input type="file" class="ipt" id="upload64Param" multiple required><input type="submit" value="提交" class="btn" id="upload64Btn">
         </form>
     </fieldset>
     <fieldset>
@@ -42,11 +48,16 @@
         var uploadBtn = document.getElementById('uploadBtn');
         var uploadUrl = document.getElementById('uploadUrl');
         var uploadParam = document.getElementById('uploadParam');
+        var upload64Form = document.forms.namedItem('img64');
+        var upload64Btn = document.getElementById('upload64Btn');
+        var upload64Url = document.getElementById('upload64Url');
+        var upload64Param = document.getElementById('upload64Param');
         var result = document.getElementById('result');
 
         getBtn.onclick = get;
         postBtn.onclick = post;
         uploadForm.onsubmit = upload;
+        upload64Form.onsubmit = upload64;
 
         function get() {
             var xhr = new XMLHttpRequest();
@@ -81,6 +92,32 @@
             };
             xhr.send(oData);
             event.preventDefault();
+        }
+
+        function upload64(event){
+            event.preventDefault();
+            var params = {login_name:'admin',photos:[]};
+            for(var i=0;i<upload64Param.files.length;i++){
+                var reader = new FileReader();
+                reader.readAsDataURL(upload64Param.files[i]);
+                reader.onload = function(e){
+                    params.photos.push(this.result);
+                }
+            }
+
+            setTimeout(function() {
+                upload64Handler(params);
+            },1000);
+        }
+
+        function upload64Handler(params) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", upload64Url.value, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify(params));
+            xhr.onload = function() {
+                result.value = xhr.responseText;
+            }
         }
 
     </script>

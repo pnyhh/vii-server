@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var getTest = require('./routes/getTest');
 var postTest = require('./routes/postTest');
 var uploadTest = require('./routes/uploadTest');
+var upload64Test = require('./routes/upload64Test');
 var login = require('./routes/auth/login');
 var register = require('./routes/auth/register');
 var profile = require('./routes/auth/profile');
@@ -33,7 +34,7 @@ app.set('view engine', 'html');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'2048kb'}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -44,7 +45,7 @@ app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods","POST,GET");
     res.header("X-Powered-By",' 3.2.1')
-    res.header("Content-Type", "application/json;charset=utf-8");
+    // res.header("Content-Type", "application/json;charset=utf-8");
     next();
 });
 
@@ -52,6 +53,7 @@ app.use('/', index);
 app.use('/getTest', getTest);
 app.use('/postTest', postTest);
 app.use('/uploadTest', uploadTest);
+app.use('/upload64Test', upload64Test);
 app.use('/login', login);
 app.use('/register', register);
 app.use('/getProfile', profile);
