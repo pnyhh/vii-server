@@ -12,6 +12,11 @@ var uploadTest = require('./routes/uploadTest');
 var login = require('./routes/auth/login');
 var register = require('./routes/auth/register');
 var profile = require('./routes/auth/profile');
+var saveDiary = require('./routes/diary/save');
+var getDiary = require('./routes/diary/get');
+var delDiary = require('./routes/diary/delete');
+var getDiaryByPos = require('./routes/diary/getByPos');
+var refreshDiary = require('./routes/diary/refresh');
 
 var app = express();
 
@@ -33,6 +38,7 @@ app.set('view engine', 'html');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(bodyParser({limit: '5mb'}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -55,6 +61,11 @@ app.use('/uploadTest', uploadTest);
 app.use('/login', login);
 app.use('/register', register);
 app.use('/getProfile', profile);
+app.use('/saveDiary', saveDiary);
+app.use('/getDiary', getDiary);
+app.use('/delDiary', delDiary);
+app.use('/getDiaryByPosition', getDiaryByPos);
+app.use('/refreshDiary', refreshDiary);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

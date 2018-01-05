@@ -22,7 +22,7 @@
     <fieldset>
         <legend>UPLOAD</legend>
         <form enctype="multipart/form-data" method="post" name="fileinfo">
-            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" class="ipt" id="uploadParam" name="fulAvatar" required><input type="submit" value="提交" class="btn" id="uploadBtn">
+            <label>URL : </label><input type="text" class="ipt" id="uploadUrl"> <label>Params : </label><input type="file" multiple class="ipt" id="uploadParam" name="fulAvatar" required><input type="submit" value="提交" class="btn" id="uploadBtn">
         </form>
     </fieldset>
     <fieldset>
@@ -68,8 +68,10 @@
         }
 
         function upload(event) {
-            var oData = new FormData(uploadForm);
-            oData.append("CustomField", "This is some extra data");
+            var oData = new FormData();
+            for(var i=0;i<uploadParam.files.length;i++){
+                oData.append('image'+i,uploadParam.files[i])
+            }
             var xhr = new XMLHttpRequest();
             xhr.open("POST", uploadUrl.value, true);
             xhr.onload = function(event) {
